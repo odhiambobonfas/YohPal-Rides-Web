@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserType } from "@/types/users";
 
 export default function Page() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState<UserType>("customer");
 
   const [confirmError, setConfirmError] = useState<string | null>(null);
 
@@ -44,7 +45,7 @@ export default function Page() {
       toast.error("All fields are required");
       return;
     }
-    const { success } = await signUp({ email, password, role});
+    const { success } = await signUp({ email, password, role });
     if (success) router.push("/");
   };
   const [showPassword, setShowPassword] = useState(false);
@@ -60,8 +61,8 @@ export default function Page() {
               src="/logo_circular.png"
               alt="Yohpal logo"
             />
-            <h4 className="text-4xl font-semibold">YOHPAL</h4>
-            <h5 className="text-lg">Welcome to Yohpal website!</h5>
+            <h4 className="text-4xl font-semibold">YOHPAL RIDES</h4>
+            <h5 className="text-lg">Welcome to Yohpal Rides!</h5>
           </div>
           {(error || confirmError) && (
             <span className="text-red-500">{error || confirmError}</span>
@@ -80,7 +81,11 @@ export default function Page() {
             <div className="flex flex-col gap-2">
               <label htmlFor="">I am a</label>
               <div className="relative">
-                <Select name="role" required onValueChange={(value) => setRole(value)}>
+                <Select
+                  name="role"
+                  required
+                  onValueChange={(value) => setRole(value as UserType)}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="customer" />
                   </SelectTrigger>

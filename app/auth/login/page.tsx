@@ -62,8 +62,8 @@ function LoginComponent() {
               src="/logo_circular.png"
               alt="Yohpal logo"
             />
-            <h4 className="text-4xl font-semibold">YOHPAL</h4>
-            <h5 className="text-lg">Welcome to Yohpal website!</h5>
+            <h4 className="text-4xl font-semibold">YOHPAL RIDES</h4>
+            <h5 className="text-lg">Welcome to Yohpal Rides!</h5>
           </div>
           {error && <span className="text-red-500">{error}</span>}
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-5">
