@@ -43,7 +43,6 @@ export default function Home() {
               src="/rides.svg"
               height={1000}
               width={1000}
-              quality={100}
               alt="stuff"
               className="w-full h-full"
             />
