@@ -3,7 +3,6 @@ import { Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
 
 const rubik = Rubik({
-  weight: "500",
   subsets: ["latin"],
 });
 
