@@ -46,7 +46,7 @@ function LoginComponent() {
         router.push(decodedUrl);
         return;
       }
-      router.push("/");
+      router.push("/dashboard");
     }
   };
 
