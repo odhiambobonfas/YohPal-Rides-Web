@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
+import { YPAuthProvider } from "@/providers/Auth";
 
 const rubik = Rubik({
   subsets: ["latin"],
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${rubik.className} ${geistMono.variable} antialiased`}>
-        {children}
+        <YPAuthProvider>
+          {children}
+        </YPAuthProvider>
       </body>
     </html>
   );

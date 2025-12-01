@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { LucideCar, LucideCarFront, LucideChevronDown, LucideClock4, LucideMapPin, LucideMotorbike } from "lucide-react";
 import {
   DropdownMenu,
@@ -16,6 +20,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const router = useRouter();
+  const [pickupLocation, setPickupLocation] = useState("");
   return (
     <main className="min-h-screen text-slate-900">
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(101%_50%_at_50%_0%,rgba(239,68,68,0.15)_0,rgba(239,68,68,0)_50%,rgba(239,68,68,0)_100%)]"></div>
@@ -50,7 +56,12 @@ export default function Home() {
 
             <div className="flex gap-4 flex-col sm:flex-row">
               <InputGroup className="md:max-w-lg rounded-xl">
-                <InputGroupInput placeholder="Pickup location" className="text-sm sm:text-base md:text-lg"/>
+                <InputGroupInput
+                  placeholder="Pickup location"
+                  className="text-sm sm:text-base md:text-lg"
+                  value={pickupLocation}
+                  onChange={(e) => setPickupLocation(e.target.value)}
+                />
 
                 <InputGroupAddon align="inline-start">
                   <LucideMapPin/>
@@ -58,7 +69,7 @@ export default function Home() {
                 <InputGroupAddon align="inline-end">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <InputGroupButton variant="ghost" className="!pr-1.5 text-xs">
+                      <InputGroupButton variant="ghost" className="pr-1.5! text-xs">
                         <LucideClock4/>Schedule<LucideChevronDown className="" />
                       </InputGroupButton>
                     </DropdownMenuTrigger>
@@ -71,7 +82,12 @@ export default function Home() {
               </InputGroup>
 
             </div>
-            <Button className="px-6 sm:px-8 py-4 sm:py-6 text-sm sm:text-lg rounded-xl hover:bg-primary/90 transition-all w-full sm:w-auto">View Prices</Button>
+            <Button
+              onClick={() => router.push(`/dashboard?pickup=${encodeURIComponent(pickupLocation)}`)}
+              className="px-6 sm:px-8 py-4 sm:py-6 text-sm sm:text-lg rounded-xl hover:bg-primary/90 transition-all w-full sm:w-auto"
+            >
+              View Prices
+            </Button>
           </div>
 
           <div className="hidden md:flex h-[50svh] md:h-[70svh] items-center justify-center">
