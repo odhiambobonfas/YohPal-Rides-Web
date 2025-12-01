@@ -1,113 +1,121 @@
 "use client"
 
+import { Suspense, useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { APIProvider } from "@vis.gl/react-google-maps"
 import RideMap from "@/components/app/RideMap"
 import UserProfile from "@/components/app/UserProfile"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { LucideCar, LucideClock4, LucideMapPin, LucideMapPinCheck } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { TripProvider } from "@/providers/TripContext"
+import { DEBOUNCE_TIMING } from "@/constants/debounce"
 
 const mapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 if (!mapsApiKey) throw new Error("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY")
 
-export default function Page() {
+const DUMMY_RIDES = [
+    { id: "1", driver: "John Davis", vehicle: "Toyota Prius", model: "2023", plates: "KEN-4729-A", rating: 4.8, price: 12.50, eta: 4 },
+    { id: "2", driver: "Sarah Mitchell", vehicle: "Honda Civic", model: "2022", plates: "KEN-7382-B", rating: 4.9, price: 14.00, eta: 6 },
+    { id: "3", driver: "Mike Khan", vehicle: "Tesla Model 3", model: "2024", plates: "KEN-1905-C", rating: 5.0, price: 18.50, eta: 3 },
+]
+
+function PageContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
 
+    // Raw input state - updates immediately as user types
     const [pickup, setPickup] = useState(searchParams.get("pickup") || "")
     const [dropoff, setDropoff] = useState(searchParams.get("dropoff") || "")
     const [schedule, setSchedule] = useState(searchParams.get("schedule") || "now")
 
-    const [showPickupSuggestions, setShowPickupSuggestions] = useState(false)
-    const [showDropoffSuggestions, setShowDropoffSuggestions] = useState(false)
+    // Debounced map state - only updates after 500ms of no changes
+    const [mapPickup, setMapPickup] = useState(searchParams.get("pickup") || "")
+    const [mapDropoff, setMapDropoff] = useState(searchParams.get("dropoff") || "")
 
-    const handleFindRides = () => {
+    const [showRides, setShowRides] = useState(false)
+    const [selectedRide, setSelectedRide] = useState<string | null>(null)
+
+    // Debounce map state updates - prevents polyline from jumping
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMapPickup(pickup)
+            setMapDropoff(dropoff)
+        }, DEBOUNCE_TIMING.LOCATION_INPUT)
+
+        return () => clearTimeout(timer)
+    }, [pickup, dropoff])
+
+    // Debounce URL updates when pickup/dropoff change
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            updateUrl(pickup, dropoff, schedule)
+        }, DEBOUNCE_TIMING.LOCATION_INPUT)
+
+        return () => clearTimeout(timer)
+    }, [pickup, dropoff, schedule])
+
+    const updateUrl = (p: string, d: string, s: string) => {
         const params = new URLSearchParams()
-        if (pickup) params.set("pickup", pickup)
-        if (dropoff) params.set("dropoff", dropoff)
-        if (schedule) params.set("schedule", schedule)
+        if (p) params.set("pickup", p)
+        if (d) params.set("dropoff", d)
+        if (s) params.set("schedule", s)
 
         router.push(`/dashboard?${params.toString()}`)
     }
 
+    const handlePickupChange = (value: string) => {
+        setPickup(value)
+    }
+
+    const handleDropoffChange = (value: string) => {
+        setDropoff(value)
+    }
+
+    const handleScheduleChange = (value: string) => {
+        setSchedule(value)
+    }
+
+    const handleFindRides = () => {
+        updateUrl(pickup, dropoff, schedule)
+        setShowRides(true)
+    }
+
+    const handleSelectRide = (rideId: string) => {
+        setSelectedRide(rideId)
+    }
+
     return (
-        <section className="relative w-full h-screen overflow-hidden">
-            <RideMap
-                mapsApiKey={mapsApiKey!}
-                pickup={searchParams.get("pickup") || ""}
-                dropoff={searchParams.get("dropoff") || ""}
-            />
+        <TripProvider>
+            <APIProvider apiKey={mapsApiKey!}>
+                <section className="relative w-full h-screen overflow-hidden">
+                <RideMap
+                    mapsApiKey={mapsApiKey!}
+                    pickup={mapPickup}
+                    dropoff={mapDropoff}
+                    inputPickup={pickup}
+                    inputDropoff={dropoff}
+                    onPickupChange={handlePickupChange}
+                    onDropoffChange={handleDropoffChange}
+                    onScheduleChange={handleScheduleChange}
+                    schedule={schedule}
+                    onFindRides={handleFindRides}
+                    showRides={showRides}
+                    selectedRide={selectedRide}
+                    onSelectRide={handleSelectRide}
+                    rides={DUMMY_RIDES}
+                />
 
-            <div className="absolute top-0 left-0 right-0 inline-flex justify-between w-full p-2 z-10 pointer-events-none">
-                <Card className="w-98 mt-4 ml-4 pointer-events-auto">
-                    <CardContent className="w-full flex flex-col gap-4">
-                        <div className="relative">
-                            <InputGroup className="">
-                                <InputGroupInput
-                                    placeholder="Pickup location"
-                                    className="text-sm sm:text-base md:text-lg text-slate-700"
-                                    value={pickup}
-                                    onChange={(e) => {
-                                        setPickup(e.target.value)
-                                    }}
-                                />
-                                <InputGroupAddon align="inline-start">
-                                    <LucideMapPin />
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </div>
-
-                        <div className="relative">
-                            <InputGroup className="">
-                                <InputGroupInput
-                                    placeholder="Dropoff location"
-                                    className="text-sm sm:text-base md:text-lg"
-                                    value={dropoff}
-                                    onChange={(e) => setDropoff(e.target.value)}
-                                />
-                                <InputGroupAddon align="inline-start">
-                                    <LucideMapPinCheck className="text-green-700" />
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </div>
-
-                        <div className="w-full inline-flex items-center justify-center gap-2">
-                            <LucideClock4 />
-                            <Select value={schedule} onValueChange={setSchedule}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="now">Pick up now</SelectItem>
-                                    <SelectItem value="later">Schedule for later</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </CardContent>
-                    <CardFooter className="m-0">
-                        <Button
-                            className="w-full hover:scale-101 transition-all"
-                            onClick={handleFindRides}
-                            disabled={!pickup.trim() || !dropoff.trim()}
-                        >
-                            <LucideCar className="fill-current" />
-                            Find Rides
-                        </Button>
-                    </CardFooter>
-                </Card>
-                <div className="pointer-events-auto">
-                    <UserProfile />
+                <div className="absolute top-4 right-4 z-10 pointer-events-auto">
+                    <UserProfile driverEta={selectedRide ? `${DUMMY_RIDES.find(r => r.id === selectedRide)?.eta} min` : null} />
                 </div>
-            </div>
-        </section>
+                </section>
+            </APIProvider>
+        </TripProvider>
+    )
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <PageContent />
+        </Suspense>
     )
 }
