@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   const router = useRouter();
   const [pickupLocation, setPickupLocation] = useState("");
+  const [schedule, setSchedule] = useState("now");
   return (
     <main className="min-h-screen text-slate-900">
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(101%_50%_at_50%_0%,rgba(239,68,68,0.15)_0,rgba(239,68,68,0)_50%,rgba(239,68,68,0)_100%)]"></div>
@@ -69,21 +70,21 @@ export default function Home() {
                 <InputGroupAddon align="inline-end">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <InputGroupButton variant="ghost" className="pr-1.5! text-xs">
-                        <LucideClock4/>Schedule<LucideChevronDown className="" />
-                      </InputGroupButton>
-                    </DropdownMenuTrigger>
+                       <InputGroupButton variant="ghost" className="pr-1.5! text-xs">
+                         <LucideClock4/>{schedule === "now" ? "Pick up now" : "Schedule for later"}<LucideChevronDown className="" />
+                       </InputGroupButton>
+                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      <DropdownMenuItem className="rounded-lg">Schedule for later</DropdownMenuItem>
-                      <DropdownMenuItem className="rounded-lg">Pick up now</DropdownMenuItem>
-                    </DropdownMenuContent>
+                       <DropdownMenuItem className="rounded-lg" onClick={() => setSchedule("later")}>Schedule for later</DropdownMenuItem>
+                       <DropdownMenuItem className="rounded-lg" onClick={() => setSchedule("now")}>Pick up now</DropdownMenuItem>
+                     </DropdownMenuContent>
                   </DropdownMenu>
                 </InputGroupAddon>
               </InputGroup>
 
             </div>
             <Button
-              onClick={() => router.push(`/dashboard?pickup=${encodeURIComponent(pickupLocation)}`)}
+              onClick={() => router.push(`/dashboard?pickup=${encodeURIComponent(pickupLocation)}&schedule=${schedule}`)}
               className="px-6 sm:px-8 py-4 sm:py-6 text-sm sm:text-lg rounded-xl hover:bg-primary/90 transition-all w-full sm:w-auto"
             >
               View Prices
