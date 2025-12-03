@@ -1,6 +1,5 @@
 "use client"
 import {
-    LucideCarFront,
     LucideHistory,
     LucideHome,
     LucideList,
@@ -10,7 +9,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React from "react"
-
 import {
     Sidebar,
     SidebarContent,
@@ -24,75 +22,88 @@ import {
 
 const navItems = [
     { icon: LucideHome, title: "Home", link: "/dashboard" },
-    {icon: LucideUser, title: "Profile", link: "/profile"},
-    {icon: LucideList, title: "Orders", link: "/orders"},
-    {icon: LucideHistory, title: "History", link: "/history"},
-    {icon: LucideCarFront, title: "My Rides", link: "/rides"}
-
+    { icon: LucideUser, title: "Profile", link: "/profile" },
+    { icon: LucideList, title: "Orders", link: "/orders" },
+    { icon: LucideHistory, title: "History", link: "/history" }
 ]
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const pathname = usePathname()
-
+    
     const isActive = (itemLink: string) => {
-        if (itemLink === "/") {
-            console.log("active")
-            return pathname === "/"
+        if (itemLink === "/dashboard") {
+            return pathname === "/dashboard"
         }
         return pathname.startsWith(itemLink)
     }
 
     return (
-        <Sidebar collapsible="icon" className="group/sidebar" {...props}>
-            <SidebarHeader className="flex justify-center">
+        <Sidebar collapsible="icon" className="group/sidebar border-r" {...props}>
+            <SidebarHeader className="border-b border-sidebar-border py-4">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar">
-                            <Link href="/" className="flex items-center gap-2">
-                                <Image
-                                    priority={true}
-                                    src="/logo_circular.png"
-                                    className="size-8 shrink-0"
-                                    width={100}
-                                    height={100}
-                                    alt="Yohpal's logo"
-                                />
-                                <span className="font-black text-2xl">Yohpal Rides</span>
+                        <SidebarMenuButton 
+                            size="lg" 
+                            asChild 
+                            className="hover:bg-sidebar-accent transition-colors duration-200"
+                        >
+                            <Link href="/" className="flex items-center gap-3 px-2">
+                                <div className="relative size-8 shrink-0 rounded-lg overflow-hidden bg-primary/10 flex items-center justify-center">
+                                    <Image
+                                        priority={true}
+                                        src="/logo_circular.png"
+                                        className="object-cover"
+                                        width={32}
+                                        height={32}
+                                        alt="Yohpal's logo"
+                                    />
+                                </div>
+                                <div className="flex flex-col group-data-[collapsible=icon]/sidebar:hidden">
+                                    <span className="font-bold text-xl tracking-tight">Yohpal Rides</span>
+                                    <span className="text-xs text-muted-foreground">Ride with comfort</span>
+                                </div>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent className="p-2">
-                <SidebarMenu>
-                    {navItems.map((item, idx) =>
-                        (
-                            <Link
-                                href={item.link}
-                                // target={item.target}
-                                className="w-full inline-flex items-center p-1"
-                                key={idx}
-                            >
-                                <SidebarMenuItem className="w-full">
-                                    <SidebarMenuButton
-                                        tooltip={item.title}
-                                        isActive={isActive(item.link)}
-                                        className="hover:bg-primary/5 cursor-pointer"
-                                    >
-                                        <item.icon />
-                                        <span className="text-lg group-data-[collapsible=icon]/sidebar:hidden">
+
+            <SidebarContent className="px-3 py-4">
+                <SidebarMenu className="space-y-1">
+                    {navItems.map((item, idx) => {
+                        const active = isActive(item.link)
+                        return (
+                            <SidebarMenuItem key={idx}>
+                                <SidebarMenuButton
+                                    asChild
+                                    tooltip={item.title}
+                                    isActive={active}
+                                    className={`
+                                        h-11 transition-all duration-200 
+                                        hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
+                                        ${active ? 'bg-sidebar-accent font-medium shadow-sm' : ''}
+                                    `}
+                                >
+                                    <Link href={item.link} className="flex items-center gap-3 px-3">
+                                        <item.icon className={`size-5 shrink-0 ${active ? 'text-primary' : ''}`} />
+                                        <span className="text-base group-data-[collapsible=icon]/sidebar:hidden">
                                             {item.title}
                                         </span>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            </Link>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         )
-                    )}
+                    })}
                 </SidebarMenu>
             </SidebarContent>
-            <SidebarRail />
-            <SidebarFooter>
+
+            <SidebarFooter className="border-t border-sidebar-border p-4">
+                <div className="text-xs text-muted-foreground text-center group-data-[collapsible=icon]/sidebar:hidden">
+                    <p className="font-medium">© 2024 Yohpal Rides</p>
+                </div>
             </SidebarFooter>
+
+            <SidebarRail />
         </Sidebar>
     )
 }
