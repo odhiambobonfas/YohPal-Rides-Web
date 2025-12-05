@@ -78,7 +78,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                                     tooltip={item.title}
                                     isActive={active}
                                     className={`
-                                        h-11 transition-all duration-200 
+                                        h-11 transition-all duration-200
                                         hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
                                         ${active ? "bg-sidebar-accent font-medium shadow-sm" : ""}
                                     `}
@@ -100,7 +100,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
 
             <SidebarFooter className="border-t border-sidebar-border p-4">
                 <div className="text-xs text-muted-foreground text-center group-data-[collapsible=icon]/sidebar:hidden">
-                    <p className="font-medium">© 2024 Yohpal Rides</p>
+                    <p className="font-medium">&copy; {new Date().getFullYear()} Yohpal Rides</p>
                 </div>
             </SidebarFooter>
 
