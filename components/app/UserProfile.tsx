@@ -1,10 +1,10 @@
 "use client"
 
-import Link from "next/link"
-import { LucideClock4, LucideNavigation } from "lucide-react"
 import { formatDuration } from "@/lib/duration"
 import { useAuth } from "@/providers/Auth"
 import { useTripContext } from "@/providers/TripContext"
+import { LucideClock4, LucideNavigation } from "lucide-react"
+import Link from "next/link"
 
 interface UserProfileProps {
     driverEta?: string | null

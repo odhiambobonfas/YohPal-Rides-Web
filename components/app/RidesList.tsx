@@ -35,17 +35,25 @@ export default function RidesList({ rides, selectedRide, onSelectRide }: RidesLi
                     <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex-1 min-w-0">
                             <p className="font-bold text-sm text-gray-900">{ride.driver}</p>
-                            <p className="text-xs text-gray-600 mt-1">{ride.vehicle} • {ride.model}</p>
+                            <p className="text-xs text-gray-600 mt-1">
+                                {ride.vehicle} • {ride.model}
+                            </p>
                         </div>
                         <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg flex-shrink-0">
                             <LucideStar className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                            <span className="text-xs font-semibold text-gray-900">{ride.rating}</span>
+                            <span className="text-xs font-semibold text-gray-900">
+                                {ride.rating}
+                            </span>
                         </div>
                     </div>
                     <p className="text-xs text-gray-500 font-mono mb-3">{ride.plates}</p>
                     <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <span className="text-sm font-bold text-gray-900">${ride.price.toFixed(2)}</span>
-                        <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2.5 py-1 rounded-lg">{ride.eta} min</span>
+                        <span className="text-sm font-bold text-gray-900">
+                            ${ride.price.toFixed(2)}
+                        </span>
+                        <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2.5 py-1 rounded-lg">
+                            {ride.eta} min
+                        </span>
                     </div>
                 </button>
             ))}

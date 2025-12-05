@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useMemo, useState, ReactNode } from "react"
+import { createContext, ReactNode, useContext, useMemo, useState } from "react"
 
 interface TripContextType {
     tripDuration: number | null

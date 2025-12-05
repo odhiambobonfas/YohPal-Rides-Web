@@ -1,20 +1,47 @@
 "use client"
 
-import { Suspense, useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { APIProvider } from "@vis.gl/react-google-maps"
 import RideMap from "@/components/app/RideMap"
 import UserProfile from "@/components/app/UserProfile"
-import { TripProvider } from "@/providers/TripContext"
 import { DEBOUNCE_TIMING } from "@/constants/debounce"
+import { TripProvider } from "@/providers/TripContext"
+import { APIProvider } from "@vis.gl/react-google-maps"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState } from "react"
 
 const mapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 if (!mapsApiKey) throw new Error("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY")
 
 const DUMMY_RIDES = [
-    { id: "1", driver: "John Davis", vehicle: "Toyota Prius", model: "2023", plates: "KEN-4729-A", rating: 4.8, price: 12.50, eta: 4 },
-    { id: "2", driver: "Sarah Mitchell", vehicle: "Honda Civic", model: "2022", plates: "KEN-7382-B", rating: 4.9, price: 14.00, eta: 6 },
-    { id: "3", driver: "Mike Khan", vehicle: "Tesla Model 3", model: "2024", plates: "KEN-1905-C", rating: 5.0, price: 18.50, eta: 3 },
+    {
+        id: "1",
+        driver: "John Davis",
+        vehicle: "Toyota Prius",
+        model: "2023",
+        plates: "KEN-4729-A",
+        rating: 4.8,
+        price: 12.5,
+        eta: 4,
+    },
+    {
+        id: "2",
+        driver: "Sarah Mitchell",
+        vehicle: "Honda Civic",
+        model: "2022",
+        plates: "KEN-7382-B",
+        rating: 4.9,
+        price: 14.0,
+        eta: 6,
+    },
+    {
+        id: "3",
+        driver: "Mike Khan",
+        vehicle: "Tesla Model 3",
+        model: "2024",
+        plates: "KEN-1905-C",
+        rating: 5.0,
+        price: 18.5,
+        eta: 3,
+    },
 ]
 
 function PageContent() {
@@ -86,26 +113,32 @@ function PageContent() {
         <TripProvider>
             <APIProvider apiKey={mapsApiKey!}>
                 <section className="relative w-full h-screen overflow-hidden">
-                <RideMap
-                    mapsApiKey={mapsApiKey!}
-                    pickup={mapPickup}
-                    dropoff={mapDropoff}
-                    inputPickup={pickup}
-                    inputDropoff={dropoff}
-                    onPickupChange={handlePickupChange}
-                    onDropoffChange={handleDropoffChange}
-                    onScheduleChange={handleScheduleChange}
-                    schedule={schedule}
-                    onFindRides={handleFindRides}
-                    showRides={showRides}
-                    selectedRide={selectedRide}
-                    onSelectRide={handleSelectRide}
-                    rides={DUMMY_RIDES}
-                />
+                    <RideMap
+                        mapsApiKey={mapsApiKey!}
+                        pickup={mapPickup}
+                        dropoff={mapDropoff}
+                        inputPickup={pickup}
+                        inputDropoff={dropoff}
+                        onPickupChange={handlePickupChange}
+                        onDropoffChange={handleDropoffChange}
+                        onScheduleChange={handleScheduleChange}
+                        schedule={schedule}
+                        onFindRides={handleFindRides}
+                        showRides={showRides}
+                        selectedRide={selectedRide}
+                        onSelectRide={handleSelectRide}
+                        rides={DUMMY_RIDES}
+                    />
 
-                <div className="absolute top-4 right-4 z-10 pointer-events-auto">
-                    <UserProfile driverEta={selectedRide ? `${DUMMY_RIDES.find(r => r.id === selectedRide)?.eta} min` : null} />
-                </div>
+                    <div className="absolute top-4 right-4 z-10 pointer-events-auto">
+                        <UserProfile
+                            driverEta={
+                                selectedRide
+                                    ? `${DUMMY_RIDES.find((r) => r.id === selectedRide)?.eta} min`
+                                    : null
+                            }
+                        />
+                    </div>
                 </section>
             </APIProvider>
         </TripProvider>

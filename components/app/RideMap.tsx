@@ -1,7 +1,16 @@
 "use client"
 import { geocodeAddress } from "@/actions/geocode"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { useTripContext } from "@/providers/TripContext"
-import RidesList from "./RidesList"
 import {
     AdvancedMarker,
     ControlPosition,
@@ -12,18 +21,9 @@ import {
     useMap,
     useMapsLibrary,
 } from "@vis.gl/react-google-maps"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { LucideCar, LucideClock4 } from "lucide-react"
-import { useEffect, useRef, useState, memo } from "react"
+import { memo, useEffect, useRef, useState } from "react"
+import RidesList from "./RidesList"
 
 interface Ride {
     id: string

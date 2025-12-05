@@ -7,7 +7,10 @@ interface AutocompletePrediction {
     secondary_text?: string
 }
 
-export async function getAutocompleteSuggestions(input: string, apiKey: string): Promise<AutocompletePrediction[]> {
+export async function getAutocompleteSuggestions(
+    input: string,
+    apiKey: string,
+): Promise<AutocompletePrediction[]> {
     if (!input || input.length < 2) return []
 
     try {
@@ -17,10 +20,10 @@ export async function getAutocompleteSuggestions(input: string, apiKey: string):
 
         const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}&language=en`
         console.log("Fetching autocomplete from:", url.replace(apiKey, "***"))
-        
+
         const response = await fetch(url)
         const data = await response.json()
-        
+
         console.log("Autocomplete API response:", data)
 
         if (data.predictions) {
