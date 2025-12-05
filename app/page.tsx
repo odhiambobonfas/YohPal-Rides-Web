@@ -58,7 +58,7 @@ export default function Home() {
                 <InputGroupAddon align="inline-end">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <InputGroupButton variant="ghost" className="!pr-1.5 text-xs">
+                      <InputGroupButton variant="ghost" className="pr-1.5! text-xs">
                         <LucideClock4/>Schedule<LucideChevronDown className="" />
                       </InputGroupButton>
                     </DropdownMenuTrigger>
