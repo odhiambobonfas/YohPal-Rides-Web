@@ -23,6 +23,7 @@ import {
 } from "@vis.gl/react-google-maps"
 import { LucideCar, LucideClock4 } from "lucide-react"
 import { memo, useEffect, useRef, useState } from "react"
+import type { AdvancedMarkerRef } from "@vis.gl/react-google-maps"
 import RidesList from "./RidesList"
 
 interface Ride {
@@ -77,8 +78,8 @@ function RideMapComponent({
     const [pickupLocation, setPickupLocation] = useState<LatLng | null>(null)
     const [dropoffLocation, setDropoffLocation] = useState<LatLng | null>(null)
     const [openDropoff, setOpenDropoff] = useState(false)
-    const pickupMarkerRef = useRef(null)
-    const dropoffMarkerRef = useRef(null)
+    const pickupMarkerRef = useRef<AdvancedMarkerRef>(null)
+    const dropoffMarkerRef = useRef<AdvancedMarkerRef>(null)
     const mapContainerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -123,7 +124,7 @@ function RideMapComponent({
                     <AdvancedMarker position={pickupLocation} ref={pickupMarkerRef}>
                         <Pin background={"#EF4444"} glyphColor={"#FFFFFF"} />
                         <InfoWindow
-                            anchor={pickupMarkerRef}
+                            anchor={pickupMarkerRef.current}
                             maxWidth={280}
                             shouldFocus={false}
                         >
@@ -159,7 +160,7 @@ function RideMapComponent({
                         <Pin background={"#3B82F6"} glyphColor={"#FFFFFF"} />
                         {openDropoff && (
                             <InfoWindow
-                                anchor={dropoffMarkerRef}
+                                anchor={dropoffMarkerRef.current}
                                 onClose={() => setOpenDropoff(false)}
                                 maxWidth={280}
                                 shouldFocus={false}
