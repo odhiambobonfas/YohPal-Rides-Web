@@ -1,4 +1,4 @@
-import { historyData } from "@/app/data/history"
+import { historyData } from "@/data/history"
 
 import {
     LucideClock,

@@ -1,6 +1,5 @@
-import { ordersData } from "@/app/data/orders"
+import { ordersData } from "@/data/orders"
 import { formatCurrency, formatDate, prettyStatus } from "@/lib/utils"
-import { type Order } from "@/types/orders"
 
 import {
     LucideClock,
@@ -13,10 +12,8 @@ import {
 } from "lucide-react"
 
 export default function Page() {
-    const orders: Order[] = ordersData
-
-    const totalOrders = orders.length
-    const totalEarnings = orders.reduce((sum, order) => sum + (order.totalFare ?? 0), 0)
+    const totalOrders = ordersData.length
+    const totalEarnings = ordersData.reduce((sum, order) => sum + (order.totalFare ?? 0), 0)
 
     if (totalOrders === 0) return <NoOrders />
 
@@ -48,7 +45,7 @@ export default function Page() {
                         <h1 className="text-4xl text-gray-600">Orders</h1>
 
                         <div className="flex flex-col gap-6">
-                            {orders.map((order) => (
+                            {ordersData.map((order) => (
                                 <div
                                     key={order.id}
                                     className="flex flex-col bg-background w-[70%] p-5 gap-4 rounded-4xl shadow-sm"
