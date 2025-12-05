@@ -1,4 +1,5 @@
 import ordersData from "@/app/data/orders.json";
+import { formatCurrency, formatDate, prettyStatus } from "@/lib/utils";
 
 import {
   LucideClock,
@@ -10,23 +11,7 @@ import {
   LucideTruck
 } from "lucide-react";
 
-function formatCurrency(amount?: number) {
-  if (!amount && amount !== 0) return "KES 0";
-  return `KES ${Math.round(amount)}`;
-}
 
-function formatDate(ms?: number | string) {
-  if (!ms) return "-";
-  // handle seconds or milliseconds
-  const n = Number(ms);
-  const date = n > 1e12 ? new Date(n) : new Date(n * 1000);
-  return date.toLocaleString();
-}
-
-function prettyStatus(status?: string) {
-  if (!status) return "Unknown";
-  return status.replace(/^OrderStatus\.?/i, "");
-}
 
 export default function Page() {
     const data = ordersData as OrdersJSON;
