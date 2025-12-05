@@ -18,7 +18,7 @@ export default function NotLoggedIn() {
             isOpen
             type="info"
             title="Logged Out"
-            description="We can't show you your following feed just yet"
+            description="We can't show you your profile page just yet"
             cancelText="Go back"
             onClose={router.back}
             actionText="Login"
