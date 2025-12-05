@@ -45,7 +45,8 @@ export async function getAutocompleteSuggestions(
         }
 
         return []
-    } catch (error) {
+    } catch (__error) {
+        console.error("Autocomplete suggestion failed:", __error)
         return []
     }
 }

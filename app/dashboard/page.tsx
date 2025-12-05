@@ -6,7 +6,7 @@ import { DEBOUNCE_TIMING } from "@/constants/debounce"
 import { TripProvider } from "@/providers/TripContext"
 import { APIProvider } from "@vis.gl/react-google-maps"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useCallback, useEffect, useState } from "react"
 
 const mapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 if (!mapsApiKey) throw new Error("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY")
@@ -70,6 +70,15 @@ function PageContent() {
         return () => clearTimeout(timer)
     }, [pickup, dropoff])
 
+    const updateUrl = useCallback((p: string, d: string, s: string) => {
+        const params = new URLSearchParams()
+        if (p) params.set("pickup", p)
+        if (d) params.set("dropoff", d)
+        if (s) params.set("schedule", s)
+
+        router.push(`/dashboard?${params.toString()}`)
+    }, [router])
+
     // Debounce URL updates when pickup/dropoff change
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -77,16 +86,7 @@ function PageContent() {
         }, DEBOUNCE_TIMING.LOCATION_INPUT)
 
         return () => clearTimeout(timer)
-    }, [pickup, dropoff, schedule])
-
-    const updateUrl = (p: string, d: string, s: string) => {
-        const params = new URLSearchParams()
-        if (p) params.set("pickup", p)
-        if (d) params.set("dropoff", d)
-        if (s) params.set("schedule", s)
-
-        router.push(`/dashboard?${params.toString()}`)
-    }
+    }, [pickup, dropoff, schedule, updateUrl])
 
     const handlePickupChange = (value: string) => {
         setPickup(value)

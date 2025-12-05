@@ -25,7 +25,8 @@ export async function geocodeAddress(address: string): Promise<LatLng | null> {
         }
 
         return null
-    } catch (error) {
+    } catch (__error) {
+        console.error("Geocoding failed:", __error)
         return null
     }
 }

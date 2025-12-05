@@ -82,12 +82,30 @@ function RideMapComponent({
     const mapContainerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        if (pickup && dropoff) {
-            geocodeAddress(pickup).then(setPickupLocation)
-            geocodeAddress(dropoff).then(setDropoffLocation)
-        } else {
-            setPickupLocation(null)
-            setDropoffLocation(null)
+        let isMounted = true
+
+        const loadLocations = async () => {
+            if (!pickup || !dropoff) {
+                if (isMounted) {
+                    setPickupLocation(null)
+                    setDropoffLocation(null)
+                }
+                return
+            }
+
+            const pickupLoc = await geocodeAddress(pickup)
+            const dropoffLoc = await geocodeAddress(dropoff)
+
+            if (isMounted) {
+                setPickupLocation(pickupLoc)
+                setDropoffLocation(dropoffLoc)
+            }
+        }
+
+        loadLocations()
+
+        return () => {
+            isMounted = false
         }
     }, [pickup, dropoff])
 
@@ -105,7 +123,7 @@ function RideMapComponent({
                     <AdvancedMarker position={pickupLocation} ref={pickupMarkerRef}>
                         <Pin background={"#EF4444"} glyphColor={"#FFFFFF"} />
                         <InfoWindow
-                            anchor={pickupMarkerRef.current}
+                            anchor={pickupMarkerRef}
                             maxWidth={280}
                             shouldFocus={false}
                         >
@@ -141,7 +159,7 @@ function RideMapComponent({
                         <Pin background={"#3B82F6"} glyphColor={"#FFFFFF"} />
                         {openDropoff && (
                             <InfoWindow
-                                anchor={dropoffMarkerRef.current}
+                                anchor={dropoffMarkerRef}
                                 onClose={() => setOpenDropoff(false)}
                                 maxWidth={280}
                                 shouldFocus={false}
@@ -265,18 +283,17 @@ function RidePolyline({ pickup, dropoff, mapsApiKey }: RidePolylineProps) {
     const mapsLibrary = useMapsLibrary("maps")
     const geometryLibrary = useMapsLibrary("geometry")
     const { setTripDuration, setTripLoading, setTripError } = useTripContext()
-    const [mainPolyline, setMainPolyline] = useState<google.maps.Polyline | null>(null)
-    const [glowPolyline, setGlowPolyline] = useState<google.maps.Polyline | null>(null)
+    const mainPolylineRef = useRef<google.maps.Polyline | null>(null)
+    const glowPolylineRef = useRef<google.maps.Polyline | null>(null)
     const [encodedPath, setEncodedPath] = useState<string>("")
 
     // Fetch route from Routes API
     useEffect(() => {
         if (!pickup || !dropoff) return
 
-        // Clear old polyline path while fetching new route
-        setEncodedPath("")
-
         const fetchRoute = async () => {
+            // Clear old polyline path while fetching new route
+            setEncodedPath("")
             setTripLoading(true)
             setTripError(null)
             try {
@@ -349,56 +366,56 @@ function RidePolyline({ pickup, dropoff, mapsApiKey }: RidePolylineProps) {
     // Create polylines once maps library is available
     useEffect(() => {
         if (!mapsLibrary) return
-        setGlowPolyline(new mapsLibrary.Polyline())
-        setMainPolyline(new mapsLibrary.Polyline())
+        glowPolylineRef.current = new mapsLibrary.Polyline()
+        mainPolylineRef.current = new mapsLibrary.Polyline()
     }, [mapsLibrary])
 
     // Decode and set the path from encoded polyline
     useEffect(() => {
-        if (!mainPolyline || !glowPolyline || !geometryLibrary) return
+        if (!mainPolylineRef.current || !glowPolylineRef.current || !geometryLibrary) return
 
         // Clear polyline when no encoded path (location changed but route not fetched yet)
         if (!encodedPath) {
-            mainPolyline.setPath([])
-            glowPolyline.setPath([])
+            mainPolylineRef.current.setPath([])
+            glowPolylineRef.current.setPath([])
             return
         }
 
         const decodedPath = geometryLibrary.encoding.decodePath(encodedPath)
-        mainPolyline.setPath(decodedPath)
-        glowPolyline.setPath(decodedPath)
-    }, [mainPolyline, glowPolyline, encodedPath, geometryLibrary])
+        mainPolylineRef.current.setPath(decodedPath)
+        glowPolylineRef.current.setPath(decodedPath)
+    }, [encodedPath, geometryLibrary])
 
     // Set polyline options - glow layer (thicker, more transparent)
     useEffect(() => {
-        if (!glowPolyline) return
-        glowPolyline.setOptions({
+        if (!glowPolylineRef.current) return
+        glowPolylineRef.current.setOptions({
             strokeColor: "#2563EB",
             strokeOpacity: 0.25,
             strokeWeight: 12,
         })
-    }, [glowPolyline])
+    }, [])
 
     // Set polyline options - main layer (solid, bright)
     useEffect(() => {
-        if (!mainPolyline) return
-        mainPolyline.setOptions({
+        if (!mainPolylineRef.current) return
+        mainPolylineRef.current.setOptions({
             strokeColor: "#1D4ED8",
             strokeOpacity: 1,
             strokeWeight: 5,
         })
-    }, [mainPolyline])
+    }, [])
 
     // Add polylines to map
     useEffect(() => {
-        if (!map || !mainPolyline || !glowPolyline) return
-        glowPolyline.setMap(map)
-        mainPolyline.setMap(map)
+        if (!map || !mainPolylineRef.current || !glowPolylineRef.current) return
+        glowPolylineRef.current.setMap(map)
+        mainPolylineRef.current.setMap(map)
         return () => {
-            glowPolyline.setMap(null)
-            mainPolyline.setMap(null)
+            if (glowPolylineRef.current) glowPolylineRef.current.setMap(null)
+            if (mainPolylineRef.current) mainPolylineRef.current.setMap(null)
         }
-    }, [map, mainPolyline, glowPolyline])
+    }, [map])
 
     // Cleanup trip duration when route is unmounted
     useEffect(() => {
