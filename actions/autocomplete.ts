@@ -1,5 +1,14 @@
 "use server"
 
+interface GoogleAutocompletePrediction {
+    place_id: string
+    description: string
+    structured_formatting?: {
+        main_text: string
+        secondary_text?: string
+    }
+}
+
 interface AutocompletePrediction {
     place_id: string
     description: string
@@ -27,7 +36,7 @@ export async function getAutocompleteSuggestions(
         console.log("Autocomplete API response:", data)
 
         if (data.predictions) {
-            return data.predictions.map((pred: any) => ({
+            return data.predictions.map((pred: GoogleAutocompletePrediction) => ({
                 place_id: pred.place_id,
                 description: pred.description,
                 main_text: pred.structured_formatting?.main_text || pred.description,
