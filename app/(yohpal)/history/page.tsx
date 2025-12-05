@@ -1,4 +1,4 @@
-import historyData from "@/app/data/history.json";
+import data from "@/app/data/history.json";
 
 import { 
     LucideClock, 
@@ -9,9 +9,6 @@ import {
 } from "lucide-react";
 
 export default function Page() {
-
-    const data = historyData;
-
     return (
         <div className="h-full w-full">
             <h1 className="text-4xl font-bold w-full p-5">Trip History</h1>
