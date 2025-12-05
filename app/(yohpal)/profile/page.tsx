@@ -1,6 +1,6 @@
 import ProfileHeader from "@/components/customs/app/profile/profileHeader";
 import { COOKIES } from "@/constants";
-import NotLoggedIn from "@/constants/app/profile/NotLoggedIn";
+import NotLoggedIn from "@/components/customs/app/NotLoggedIn";
 import { getUserProfile } from "@/services/server/user";
 import { cookies } from "next/headers";
 
