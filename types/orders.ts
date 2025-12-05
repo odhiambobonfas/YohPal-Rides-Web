@@ -1,4 +1,4 @@
-type Order = {
+export interface Order {
   id: string;
   status?: string;
   totalFare?: number;
@@ -24,6 +24,3 @@ type Order = {
   vehicleType?: string;
 };
 
-type OrdersJSON = {
-  orders?: Record<string, Order>;
-};
