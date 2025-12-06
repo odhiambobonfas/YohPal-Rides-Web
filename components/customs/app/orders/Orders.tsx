@@ -68,7 +68,7 @@ export default  function Orders({orders}: {orders: Order[]}) {
 
                 <div className="flex gap-5 items-center">
                   <LucideMapPin className="text-blue-600" />
-                  <span>{order.Location?.pickupLocation ?? "Unknown pickup"}</span>
+                  <span>{order.pickupLocation ?? "Unknown pickup"}</span>
                 </div>
 
                 <div className="flex gap-5 items-center">

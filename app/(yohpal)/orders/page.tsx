@@ -1,7 +1,7 @@
 import NotLoggedIn from "@/components/customs/app/NotLoggedIn";
 import Orders from "@/components/customs/app/orders/Orders";
 import { COOKIES } from "@/constants";
-import { getUserOrders } from "@/services/client/orders";
+import { getDriverOrders } from "@/services/client/orders";
 import { cookies } from "next/headers";
 
 export default async function Page() {
@@ -10,7 +10,7 @@ export default async function Page() {
 
   if(!userId) return  <NotLoggedIn />
 
-      const orders = await getUserOrders(userId);
+      const orders = await getDriverOrders(userId);
       
   return (
     <Orders orders={orders} />

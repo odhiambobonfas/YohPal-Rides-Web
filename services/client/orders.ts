@@ -2,7 +2,7 @@ import { db } from "@/lib/firebase/firebase.browser";
 import { Order } from "@/types/orders"
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-export async function getUserOrders(userId: string): Promise<Order[]> {
+export async function getDriverOrders(userId: string): Promise<Order[]> {
   try {
     const ordersRef = collection(db, 'rides', 'orders', 'orderIds');
     

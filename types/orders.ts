@@ -14,11 +14,9 @@ export interface Order {
   acceptedDriverPhone?: string;
   acceptedVehicleModel?: string;
   acceptedVehicleNumber?: string;
-  Location?: {
-    pickupLocation?: string;
-    pickupLatitude?: number;
-    pickupLongitude?: number;
-  };
+  pickupLocation?: string;
+  pickupLatitude?: number;
+  pickupLongitude?: number;
   destinationLocation?: string;
   serviceCategory?: string;
   vehicleType?: string;
