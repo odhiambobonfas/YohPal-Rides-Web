@@ -34,4 +34,4 @@ const db = firebaseAdmin.firestore()
 const auth = firebaseAdmin.auth()
 const serverTimestamp = firebaseAdmin.firestore.FieldValue.serverTimestamp
 
-export { firebaseAdmin, db, auth, serverTimestamp  }
+export { auth, db, firebaseAdmin, serverTimestamp }

@@ -5,7 +5,6 @@ export async function middleware(request: NextRequest) {
     const cookieStore = request.cookies
     const isAuthed = cookieStore.has(COOKIES.Session)
 
-
     if (!isAuthed && request.nextUrl.pathname === "/") return NextResponse.next()
 
     if (!isAuthed && !request.nextUrl.pathname.startsWith("/auth")) {

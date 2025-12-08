@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app"
+import { getAuth } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
-import { getAuth } from "firebase/auth"
 
 if (
     !process.env.NEXT_PUBLIC_FIREBASE_APP_ID ||

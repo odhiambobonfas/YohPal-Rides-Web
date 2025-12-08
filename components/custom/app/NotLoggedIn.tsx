@@ -1,6 +1,6 @@
 "use client"
 
-import AppAlert from "@/components/customs/app/AppAlert"
+import AppAlert from "@/components/custom/app/AppAlert"
 import { useEmailAuth } from "@/hooks/auth/use-email-auth"
 import { useRouter } from "next/navigation"
 

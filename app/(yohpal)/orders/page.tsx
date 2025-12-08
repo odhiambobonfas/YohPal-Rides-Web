@@ -1,5 +1,5 @@
-import NotLoggedIn from "@/components/customs/app/NotLoggedIn";
-import Orders from "@/components/customs/app/orders/Orders";
+import NotLoggedIn from "@/components/custom/app/NotLoggedIn";
+import Orders from "@/components/custom/app/orders/Orders";
 import { COOKIES } from "@/constants";
 import { getDriverOrders } from "@/services/client/orders";
 import { cookies } from "next/headers";

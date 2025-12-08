@@ -1,5 +1,5 @@
-import NotLoggedIn from "@/components/customs/app/NotLoggedIn";
-import History from "@/components/customs/app/history/History";
+import NotLoggedIn from "@/components/custom/app/NotLoggedIn";
+import History from "@/components/custom/app/history/History";
 import { COOKIES } from "@/constants";
 import { getDriversHistory } from "@/services/client/history";
 import { cookies } from "next/headers";

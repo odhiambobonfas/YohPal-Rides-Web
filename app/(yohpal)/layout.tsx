@@ -3,13 +3,13 @@ import { Separator } from "@radix-ui/react-separator"
 import type { Metadata } from "next"
 import { Toaster } from "sonner"
 
-import AppSidebar from "@/components/customs/AppSidebar"
-// import UserDropDown from "@/components/customs/app/UserDropDown"
+import AppSidebar from "@/components/custom/AppSidebar"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { cookies } from "next/headers"
+
 export const metadata: Metadata = {
-    title: "Yohpal",
-    description: "Yohpal International limited",
+    title: "Yohpal Rides",
+    description: "Ride with comfort",
 }
 
 export default async function AppLayout({
@@ -36,7 +36,6 @@ export default async function AppLayout({
                                 className="data-[orientation=vertical]:h-5 text-primary"
                             />
                         </div>
-                        {/* <UserDropDown className="mr-4" /> */}
                     </header>
                     {children}
                 </SidebarInset>
