@@ -1,4 +1,6 @@
+"use client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useEmailAuth } from "@/hooks/auth/use-email-auth"
 import { BaseUser } from "@/types/users"
 import {
     LucideAlertCircle,
@@ -16,11 +18,18 @@ import {
     LucideStar,
     LucideTrendingUp,
 } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 interface ProfileHeadProps {
     user: BaseUser | null
 }
 export default function ProfileHeader({ user }: ProfileHeadProps) {
+    const { logOut } = useEmailAuth()
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await logOut()
+        router.push("/")
+    }
     return (
         <div className="w-full min-h-screen bg-[#f5f6f8] p-10">
             <div className="w-full space-y-8">
@@ -291,7 +300,10 @@ export default function ProfileHeader({ user }: ProfileHeadProps) {
 
                         {/* Logout */}
                         <div className="bg-white rounded-2xl shadow p-8 flex items-center justify-center">
-                            <button className="text-red-600 text-xl font-semibold hover:underline">
+                            <button
+                                onClick={handleLogout}
+                                className="text-red-600 text-xl font-semibold hover:underline"
+                            >
                                 Logout
                             </button>
                         </div>
