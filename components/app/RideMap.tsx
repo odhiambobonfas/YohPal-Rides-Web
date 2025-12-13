@@ -11,6 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useTripContext } from "@/providers/TripContext"
+import type { AdvancedMarkerRef } from "@vis.gl/react-google-maps"
 import {
     AdvancedMarker,
     ControlPosition,
@@ -23,7 +24,6 @@ import {
 } from "@vis.gl/react-google-maps"
 import { LucideCar, LucideClock4 } from "lucide-react"
 import { memo, useEffect, useRef, useState } from "react"
-import type { AdvancedMarkerRef } from "@vis.gl/react-google-maps"
 import RidesList from "./RidesList"
 
 interface Ride {

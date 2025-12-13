@@ -1,8 +1,8 @@
-import ProfileHeader from "@/components/custom/app/profile/profileHeader"
-import { COOKIES } from "@/constants"
-import NotLoggedIn from "@/constants/app/profile/NotLoggedIn"
-import { getUserProfile } from "@/services/server/user"
-import { cookies } from "next/headers"
+import ProfileHeader from "@/components/custom/app/profile/profileHeader";
+import { COOKIES } from "@/constants";
+import NotLoggedIn from "@/components/custom/app/NotLoggedIn";
+import { getUserProfile } from "@/services/server/user";
+import { cookies } from "next/headers";
 
 export default async function Page() {
     const cookieStore = await cookies()
