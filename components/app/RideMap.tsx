@@ -22,7 +22,7 @@ import {
     useMap,
     useMapsLibrary,
 } from "@vis.gl/react-google-maps"
-import { LucideCar, LucideClock4 } from "lucide-react"
+import { LucideCar, LucideClock4, Menu, X } from "lucide-react"
 import { memo, useEffect, useRef, useState } from "react"
 import RidesList from "./RidesList"
 
@@ -52,6 +52,8 @@ interface RideMapProps {
     selectedRide?: string | null
     onSelectRide?: (rideId: string) => void
     rides?: Ride[]
+    showMobileMenu?: boolean
+    onToggleMobileMenu?: () => void
 }
 
 interface LatLng {
@@ -74,6 +76,8 @@ function RideMapComponent({
     selectedRide = null,
     onSelectRide,
     rides = [],
+    showMobileMenu = false,
+    onToggleMobileMenu,
 }: RideMapProps) {
     const [pickupLocation, setPickupLocation] = useState<LatLng | null>(null)
     const [dropoffLocation, setDropoffLocation] = useState<LatLng | null>(null)
@@ -198,8 +202,89 @@ function RideMapComponent({
                     />
                 )}
 
+                <button
+                    onClick={onToggleMobileMenu}
+                    className="md:hidden fixed top-4 left-4 z-10 bg-white rounded-lg p-2 shadow-lg border border-gray-200 hover:bg-gray-50 pointer-events-auto"
+                    aria-label="Toggle menu"
+                >
+                    {showMobileMenu ? (
+                        <X className="w-6 h-6" />
+                    ) : (
+                        <Menu className="w-6 h-6" />
+                    )}
+                </button>
+
                 <MapControl position={ControlPosition.TOP_LEFT}>
-                    <Card className="w-96 mt-4 ml-4 shadow-lg border-0 flex flex-col max-h-[70vh]">
+                    {showMobileMenu && (
+                        <Card className="w-96 mt-20 ml-4 shadow-lg border-0 flex flex-col md:max-h-[70vh] md:mt-4 md:hidden">
+                            <CardContent className="w-full flex flex-col gap-4 pt-6">
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 mb-2">
+                                            Pickup
+                                        </label>
+                                        <PlaceAutocompleteSearch
+                                            placeholder="Enter pickup location"
+                                            value={inputPickup}
+                                            onChange={onPickupChange}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 mb-2">
+                                            Dropoff
+                                        </label>
+                                        <PlaceAutocompleteSearch
+                                            placeholder="Enter dropoff location"
+                                            value={inputDropoff}
+                                            onChange={onDropoffChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-full inline-flex items-center justify-center gap-2">
+                                    <LucideClock4 />
+                                    <Select value={schedule} onValueChange={onScheduleChange}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="now">Pick up now</SelectItem>
+                                            <SelectItem value="later">Schedule for later</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <Button
+                                    className="w-full hover:scale-101 transition-all"
+                                    onClick={onFindRides}
+                                    disabled={!pickup?.trim() || !dropoff?.trim()}
+                                >
+                                    <LucideCar className="fill-current" />
+                                    Find Rides
+                                </Button>
+                            </CardContent>
+
+                            {showRides && rides.length > 0 && (
+                                <div className="w-full flex flex-col items-center">
+                                    <hr className="h-2 w-11/12" />
+                                    <div className="py-3">
+                                        <h4 className="font-bold text-sm text-gray-900 mb-3">
+                                            Available Rides ({rides.length})
+                                        </h4>
+                                    </div>
+
+                                    <ScrollArea className="h-80 md:h-60 w-full">
+                                        <RidesList
+                                            rides={rides}
+                                            selectedRide={selectedRide || null}
+                                            onSelectRide={onSelectRide || (() => {})}
+                                        />
+                                    </ScrollArea>
+                                    </div>
+                                    )}
+                                    </Card>
+                                    )}
+
+                    <Card className="w-96 mt-4 ml-4 shadow-lg border-0 flex flex-col max-h-[70vh] hidden md:flex">
                         <CardContent className="w-full flex flex-col gap-4 pt-6">
                             <div className="space-y-3">
                                 <div>
@@ -469,15 +554,15 @@ function PlaceAutocompleteSearch({ placeholder, value, onChange }: PlaceAutocomp
     }, [placeAutocomplete, onChange])
 
     return (
-        <div className="relative">
+        <div className="relative z-50">
             <input
                 ref={inputRef}
                 type="text"
                 value={value}
                 onChange={(e) => onChange?.(e.target.value)}
                 placeholder={placeholder}
-                className="w-full px-5 py-3 bg-white text-gray-900 placeholder-gray-500 rounded-lg shadow-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium"
-                style={{ zIndex: 1000 }}
+                className="w-full px-5 py-3 bg-white text-gray-900 placeholder-gray-500 rounded-lg shadow-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium relative z-50"
+                style={{ zIndex: 50 }}
             />
         </div>
     )
