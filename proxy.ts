@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { COOKIES } from "./constants"
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const cookieStore = request.cookies
     const isAuthed = cookieStore.has(COOKIES.Session)
 

@@ -7,6 +7,7 @@ import { TripProvider } from "@/providers/TripContext"
 import { APIProvider } from "@vis.gl/react-google-maps"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useCallback, useEffect, useState } from "react"
+import { Menu, X } from "lucide-react"
 
 const mapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 if (!mapsApiKey) throw new Error("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY")
@@ -59,6 +60,7 @@ function PageContent() {
 
     const [showRides, setShowRides] = useState(false)
     const [selectedRide, setSelectedRide] = useState<string | null>(null)
+    const [showMobileMenu, setShowMobileMenu] = useState(false)
 
     // Debounce map state updates - prevents polyline from jumping
     useEffect(() => {
@@ -107,6 +109,7 @@ function PageContent() {
 
     const handleSelectRide = (rideId: string) => {
         setSelectedRide(rideId)
+        setShowMobileMenu(false)
     }
 
     return (
@@ -114,21 +117,23 @@ function PageContent() {
             <APIProvider apiKey={mapsApiKey!}>
                 <section className="relative w-full h-screen overflow-hidden">
                     <RideMap
-                        mapsApiKey={mapsApiKey!}
-                        pickup={mapPickup}
-                        dropoff={mapDropoff}
-                        inputPickup={pickup}
-                        inputDropoff={dropoff}
-                        onPickupChange={handlePickupChange}
-                        onDropoffChange={handleDropoffChange}
-                        onScheduleChange={handleScheduleChange}
-                        schedule={schedule}
-                        onFindRides={handleFindRides}
-                        showRides={showRides}
-                        selectedRide={selectedRide}
-                        onSelectRide={handleSelectRide}
-                        rides={DUMMY_RIDES}
-                    />
+                         mapsApiKey={mapsApiKey!}
+                         pickup={mapPickup}
+                         dropoff={mapDropoff}
+                         inputPickup={pickup}
+                         inputDropoff={dropoff}
+                         onPickupChange={handlePickupChange}
+                         onDropoffChange={handleDropoffChange}
+                         onScheduleChange={handleScheduleChange}
+                         schedule={schedule}
+                         onFindRides={handleFindRides}
+                         showRides={showRides}
+                         selectedRide={selectedRide}
+                         onSelectRide={handleSelectRide}
+                         rides={DUMMY_RIDES}
+                         showMobileMenu={showMobileMenu}
+                         onToggleMobileMenu={() => setShowMobileMenu(!showMobileMenu)}
+                     />
 
                     <div className="absolute top-4 right-4 z-10 pointer-events-auto">
                         <UserProfile
