@@ -44,7 +44,7 @@ export default function Page() {
         if (!email || !password || !role) {
             toast.error("All fields are required")
             return
-        }
+        }   
         const { success } = await signUp({ email, password, role })
         if (success) router.push("/")
     }
