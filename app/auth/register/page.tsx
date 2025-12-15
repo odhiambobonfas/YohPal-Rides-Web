@@ -86,7 +86,6 @@ export default function Page() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            {/* <SelectLabel>Fruits</SelectLabel> */}
                                             <SelectItem value="customer">Customer</SelectItem>
                                             <SelectItem value="driver">Driver</SelectItem>
                                         </SelectGroup>
