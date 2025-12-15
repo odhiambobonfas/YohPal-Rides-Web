@@ -44,7 +44,7 @@ export default function Page() {
         if (!email || !password || !role) {
             toast.error("All fields are required")
             return
-        }
+        }   
         const { success } = await signUp({ email, password, role })
         if (success) router.push("/")
     }
@@ -86,7 +86,6 @@ export default function Page() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            {/* <SelectLabel>Fruits</SelectLabel> */}
                                             <SelectItem value="customer">Customer</SelectItem>
                                             <SelectItem value="driver">Driver</SelectItem>
                                         </SelectGroup>
