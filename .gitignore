@@ -42,3 +42,21 @@ next-env.d.ts
 bun.*
 
 /app/data
+node_modules/
+venv/
+.venv/
+dist/
+build/
+.gradle/
+*.deb
+*.zip
+*.tar.gz
+*.tar
+*.iso
+*.apk
+*.aar
+*.exe
+*.pyc
+__pycache__/
+.dart_tool/
+dataconnect-generated/
